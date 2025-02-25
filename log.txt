@@ -1,0 +1,28 @@
+https://example.com/api/12346
+https://example.com/api/12362
+{
+  "args": {
+    "order_id": "12346"
+  }, 
+  "headers": {
+    "Accept": "*/*", 
+    "Host": "httpbin.org", 
+    "User-Agent": "curl/8.7.1", 
+    "X-Amzn-Trace-Id": "Root=1-67bd5796-53cd453175eda67d19f775a3"
+  }, 
+  "origin": "27.77.254.12", 
+  "url": "https://httpbin.org/get?order_id=12346"
+}
+{
+  "args": {
+    "order_id": "12362"
+  }, 
+  "headers": {
+    "Accept": "*/*", 
+    "Host": "httpbin.org", 
+    "User-Agent": "curl/8.7.1", 
+    "X-Amzn-Trace-Id": "Root=1-67bd5798-74ebc97c376980fa45238bf6"
+  }, 
+  "origin": "27.77.254.12", 
+  "url": "https://httpbin.org/get?order_id=12362"
+}
