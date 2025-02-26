@@ -1,0 +1,89 @@
+Troubleshooting High Memory Usage on NGINX Load Balancer
+
+1. Gather System Information:
+
+Check memory usage: free -h
+
+Identify top memory-consuming processes: ps aux --sort=-%mem | head -10
+
+Check system uptime and load: uptime
+
+2. Investigate NGINX Behavior:
+
+Active connections: nginx -V
+
+NGINX memory usage: ps -eo pid,comm,%mem,%cpu --sort=-%mem | grep nginx
+
+Check logs: tail -f /var/log/nginx/error.log
+
+
+
+Possible Root Causes and Recovery Steps:
+
+1. Misconfigured NGINX Worker Processes
+
+Cause: Excessive worker_processes, high worker_connections
+
+Impact: Increased memory use, performance issues
+
+Fix: Reduce worker processes in /etc/nginx/nginx.conf
+
+worker_processes auto;
+worker_connections 1024;
+
+Restart: systemctl reload nginx
+
+2. Large Buffer and Cache Sizes
+
+Cause: Large client_body_buffer_size, proxy_buffer_size
+
+Impact: High memory usage, OOM crashes
+
+Fix: Optimize buffer settings
+
+client_body_buffer_size 512k;
+proxy_buffer_size 4k;
+proxy_buffers 4 8k;
+
+Restart: systemctl restart nginx
+
+3. Excessive Logging Filling Memory
+
+Cause: Debug logging storing large data in RAM
+
+Impact: System runs out of memory
+
+Fix: Adjust logging in /etc/nginx/nginx.conf
+
+error_log /var/log/nginx/error.log warn;
+
+Rotate logs: logrotate -f /etc/logrotate.d/nginx
+Restart: systemctl restart nginx
+
+4. High Traffic or DDoS Attack
+
+Cause: Spike in requests, lack of rate limiting
+
+Impact: Memory exhaustion, slow response
+
+Fix: Enable rate limiting
+
+limit_req_zone $binary_remote_addr zone=one:10m rate=10r/s;
+
+Restart: systemctl restart nginx
+Install fail2ban: apt install fail2ban
+
+5. Memory Leak in NGINX or Modules
+
+Cause: Bug in NGINX or third-party module
+
+Impact: Persistent memory growth
+
+Fix:
+
+Run valgrind --tool=memcheck nginx
+
+Update NGINX: apt update && apt upgrade nginx
+
+Restart: systemctl restart nginx
+
